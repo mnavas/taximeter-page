@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administración — Taximeter</title>
+  <meta name="description" content="Respaldos, actualizaciones, correo (SMTP), solución de problemas y referencia de la CLI de Taximeter." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/docs.css" />
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand"><span class="brand-icon">🚕</span><span>Taximeter</span></a>
+    <div class="nav-links">
+      <a href="install.html">Instalación</a>
+      <a href="daily-use.html">Uso diario</a>
+      <a href="fleet-fares.html">Flota y tarifas</a>
+      <a href="admin.html" class="active">Administración</a>
+      <a href="https://github.com/mnavas/taximeter" target="_blank" class="btn btn-primary">Comenzar</a>
+    </div>
+    <button class="nav-hamburger" id="nav-toggle" aria-label="Abrir menú" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="install.html">Instalación</a>
+    <a href="daily-use.html">Uso diario</a>
+    <a href="fleet-fares.html">Flota y tarifas</a>
+    <a href="admin.html" class="active">Administración</a>
+    <a href="https://github.com/mnavas/taximeter" target="_blank" class="btn btn-primary">Comenzar</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="badge">🚕 Administración</div>
+  <h1>Mantenimiento del servidor</h1>
+  <p>Respaldos, actualizaciones, correo, solución de problemas y la referencia completa de comandos.</p>
+</div>
+
+<div class="toc-bar">
+  <ul>
+    <li><a href="#cli">La CLI</a></li>
+    <li><a href="#puertos">Puertos</a></li>
+    <li><a href="#respaldos">Respaldos</a></li>
+    <li><a href="#actualizar">Actualizar</a></li>
+    <li><a href="#smtp">Correo (SMTP)</a></li>
+    <li><a href="#seguridad">Seguridad</a></li>
+    <li><a href="#problemas">Problemas</a></li>
+  </ul>
+</div>
+
+<div class="page-body">
+
+  <section class="doc-section" id="cli">
+    <h2>La CLI <code>./taximeter</code></h2>
+    <p>Toda la gestión pasa por un comando (<code>taximeter</code> en Windows):</p>
+    <div class="quick-ref">
+      <h3>Comandos</h3>
+      <div class="cmd-row"><span class="cmd-label">install</span><span class="cmd-code">Configuración inicial</span></div>
+      <div class="cmd-row"><span class="cmd-label">start / stop / restart</span><span class="cmd-code">Arrancar / detener / reiniciar</span></div>
+      <div class="cmd-row"><span class="cmd-label">update</span><span class="cmd-code">Traer la última versión y reconstruir</span></div>
+      <div class="cmd-row"><span class="cmd-label">logs</span><span class="cmd-code">Ver registros en vivo (./taximeter logs auth)</span></div>
+      <div class="cmd-row"><span class="cmd-label">status</span><span class="cmd-code">Estado de los contenedores</span></div>
+      <div class="cmd-row"><span class="cmd-label">seed</span><span class="cmd-code">Insertar/actualizar la empresa desde .env</span></div>
+      <div class="cmd-row"><span class="cmd-label">add-admin</span><span class="cmd-code">Crear un admin del panel</span></div>
+      <div class="cmd-row"><span class="cmd-label">backup / restore</span><span class="cmd-code">Respaldar / restaurar la base de datos</span></div>
+      <div class="cmd-row"><span class="cmd-label">hostname</span><span class="cmd-code">URLs donde el servidor es accesible</span></div>
+      <div class="cmd-row"><span class="cmd-label">keys</span><span class="cmd-code">Ver los secretos generados (truncados)</span></div>
+    </div>
+  </section>
+
+  <section class="doc-section" id="puertos">
+    <h2>Puertos</h2>
+    <table class="doc-table">
+      <tr><th>Puerto</th><th>Servicio</th><th>Acceso</th></tr>
+      <tr><td>3000</td><td>Panel de Taximeter</td><td>Admin (y las apps usan la API)</td></tr>
+      <tr><td>3001</td><td>Supabase Studio</td><td>Admin de base de datos — mantener privado</td></tr>
+      <tr><td>8000</td><td>API de Supabase (Kong)</td><td>Usado por el panel y las apps</td></tr>
+    </table>
+    <p>Expón el 3000 (y tu API) a internet para que las apps lleguen; mantén el 3001 privado.</p>
+  </section>
+
+  <section class="doc-section" id="respaldos">
+    <h2>Respaldos</h2>
+    <div class="code-wrap"><pre><span class="kw">./taximeter</span> backup</pre></div>
+    <p>Escribe un volcado SQL con fecha en <code>backups/</code>. Cópialos a un lugar seguro y respalda antes de cada actualización.</p>
+    <div class="code-wrap"><pre><span class="kw">./taximeter</span> restore backups/taximeter_db_20260101_120000.sql
+<span class="kw">./taximeter</span> restart</pre></div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠️</span><div>Restaurar <strong>sobrescribe</strong> la base de datos actual — se te pedirá confirmar.</div></div>
+  </section>
+
+  <section class="doc-section" id="actualizar">
+    <h2>Actualizar</h2>
+    <div class="code-wrap"><pre><span class="kw">./taximeter</span> update</pre></div>
+    <p>Trae la última versión (<code>git pull origin main</code>), reconstruye la app y reinicia. <strong>Respalda antes.</strong></p>
+  </section>
+
+  <section class="doc-section" id="smtp">
+    <h2>Correo (SMTP) — solo con cuentas de pasajero</h2>
+    <p>Las cuentas de pasajero se verifican por correo. Si las activas, configura SMTP en <code>.env</code> y reinicia:</p>
+    <div class="code-wrap"><pre>SMTP_HOST=smtp.tuproveedor.com
+SMTP_PORT=587
+SMTP_USER=...
+SMTP_PASS=...
+SMTP_SENDER_NAME=TuEmpresa
+SMTP_ADMIN_EMAIL=tu@empresa.com</pre></div>
+    <p>Una instalación solo-anónima no necesita SMTP.</p>
+  </section>
+
+  <section class="doc-section" id="seguridad">
+    <h2>Seguridad</h2>
+    <ul>
+      <li>Los secretos (<code>POSTGRES_PASSWORD</code>, <code>JWT_SECRET</code>, claves de Supabase) se generan al instalar en <code>.env</code>. <strong>Mantén <code>.env</code> privado</strong> y nunca lo subas al repositorio.</li>
+      <li>Pon el servidor detrás de HTTPS (un proxy inverso como Caddy o Nginx con certificado) en producción.</li>
+      <li>Mantén Supabase Studio (puerto 3001) fuera de internet.</li>
+    </ul>
+  </section>
+
+  <section class="doc-section" id="problemas">
+    <h2>Solución de problemas</h2>
+    <h3>Un servicio se reinicia en bucle</h3>
+    <p>Revisa sus registros: <code>./taximeter logs auth</code>, <code>./taximeter logs rest</code>, <code>./taximeter logs db</code>.</p>
+    <h3>No puedo entrar al panel desde un teléfono</h3>
+    <p>La URL del QR de vinculación debe ser accesible desde datos móviles, no solo tu LAN. Usa una dirección pública o dominio y abre el puerto / configura tu proxy inverso.</p>
+    <h3>Studio aparece "unhealthy"</h3>
+    <p>Es cosmético — su chequeo espera un servicio <code>pg-meta</code> que no forma parte del stack. Studio igual funciona.</p>
+    <div class="code-wrap"><pre><span class="cm"># Comprobar que todo está arriba</span>
+<span class="kw">./taximeter</span> status</pre></div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-brand"><span class="brand-icon">🚕</span><span>Taximeter</span></div>
+  <p>Despacho, taxímetro y monitoreo de flota, autoalojado.</p>
+  <div class="footer-nav">
+    <a href="../index.html">Inicio</a>
+    <a href="install.html">Instalación</a>
+    <a href="daily-use.html">Uso diario</a>
+    <a href="fleet-fares.html">Flota y tarifas</a>
+    <a href="admin.html">Administración</a>
+    <a href="https://github.com/mnavas/taximeter" target="_blank">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('nav-mobile').classList.toggle('open');
+    document.getElementById('nav-toggle').classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

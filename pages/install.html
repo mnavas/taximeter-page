@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instalación — Taximeter</title>
+  <meta name="description" content="Instala Taximeter en tu propio servidor en minutos. Guía paso a paso para empresas de taxis." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/docs.css" />
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand"><span class="brand-icon">🚕</span><span>Taximeter</span></a>
+    <div class="nav-links">
+      <a href="install.html" class="active">Instalación</a>
+      <a href="daily-use.html">Uso diario</a>
+      <a href="fleet-fares.html">Flota y tarifas</a>
+      <a href="admin.html">Administración</a>
+      <a href="https://github.com/mnavas/taximeter" target="_blank" class="btn btn-primary">Comenzar</a>
+    </div>
+    <button class="nav-hamburger" id="nav-toggle" aria-label="Abrir menú" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="install.html" class="active">Instalación</a>
+    <a href="daily-use.html">Uso diario</a>
+    <a href="fleet-fares.html">Flota y tarifas</a>
+    <a href="admin.html">Administración</a>
+    <a href="https://github.com/mnavas/taximeter" target="_blank" class="btn btn-primary">Comenzar</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="badge">🚕 Guía de instalación</div>
+  <h1>Instala Taximeter en tu servidor</h1>
+  <p>Una instalación equivale a una empresa. Todo corre en tu propio servidor — sin nube compartida y sin comisiones.</p>
+</div>
+
+<div class="toc-bar">
+  <ul>
+    <li><a href="#requisitos">Requisitos</a></li>
+    <li><a href="#descargar">Descargar</a></li>
+    <li><a href="#asistente">Asistente</a></li>
+    <li><a href="#empresa">Tu empresa</a></li>
+    <li><a href="#tarifas">Tarifas</a></li>
+    <li><a href="#flota">Conductores y taxis</a></li>
+    <li><a href="#prueba">Prueba</a></li>
+  </ul>
+</div>
+
+<div class="page-body">
+
+  <section class="doc-section" id="requisitos">
+    <h2>Qué necesitas</h2>
+    <p>Taximeter corre en Docker sobre cualquier máquina encendida 24/7. Como los conductores y pasajeros se conectan por internet, el servidor debe ser <strong>accesible desde fuera de tu red local</strong> — lo más sencillo es un pequeño servidor en la nube (VPS) con dirección pública.</p>
+    <table class="doc-table">
+      <tr><th></th><th>Mínimo</th><th>Recomendado</th></tr>
+      <tr><td>RAM</td><td>4 GB</td><td>8 GB</td></tr>
+      <tr><td>Disco</td><td>20 GB libres</td><td>40 GB libres</td></tr>
+      <tr><td>Sistema</td><td>Ubuntu 22 / Debian 12 / cualquier host Docker</td><td>Un VPS pequeño</td></tr>
+      <tr><td>Red</td><td>Dirección pública que alcancen los teléfonos</td><td>Un dominio + HTTPS</td></tr>
+    </table>
+    <div class="callout"><span class="callout-icon">💡</span><div>Los teléfonos se vinculan escaneando un <strong>código QR</strong> con la URL de tu servidor, así que esa URL debe funcionar desde datos móviles — no solo en el WiFi de la oficina. Usa una IP fija o un dominio para que los QR nunca dejen de servir.</div></div>
+  </section>
+
+  <section class="doc-section" id="descargar">
+    <h2>Paso 1 — Descarga Taximeter</h2>
+    <p>El servidor es gratis y de código abierto (MIT). En una terminal del servidor:</p>
+    <div class="code-wrap"><pre><span class="kw">git</span> clone https://github.com/mnavas/taximeter
+<span class="kw">cd</span> taximeter</pre></div>
+    <p>Si no tienes Git, descarga el ZIP desde GitHub y descomprímelo en una carpeta llamada <code>taximeter</code>.</p>
+  </section>
+
+  <section class="doc-section" id="asistente">
+    <h2>Paso 2 — Ejecuta el asistente</h2>
+    <div class="code-wrap"><pre><span class="cm"># Linux / Mac</span>
+<span class="kw">./taximeter</span> install
+
+<span class="cm"># Windows</span>
+<span class="kw">taximeter</span> install</pre></div>
+    <p>El asistente te hace unas preguntas y luego hace todo automáticamente:</p>
+    <div class="steps">
+      <div class="step-card"><div class="step-num">1</div><div class="step-body"><h3>URL del servidor</h3><p>Muestra una lista de direcciones. Elige la que alcanzarán conductores y pasajeros (en un servidor en la nube, la dirección pública o tu dominio). En una prueba local, <code>http://localhost:3000</code>.</p></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-body"><h3>Nombre de la empresa</h3><p>Se muestra en el panel y en las apps. Lo puedes cambiar luego en Ajustes.</p></div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-body"><h3>Correo y contraseña de administrador</h3><p>Tu acceso al panel. Usa un correo real; la contraseña debe tener al menos 6 caracteres y se escribe dos veces.</p></div></div>
+    </div>
+    <p>Al terminar verás algo como:</p>
+    <div class="code-wrap"><pre>✓ Taximeter is running!
+
+  Dashboard: http://tu-servidor:3000/dashboard
+  Studio:    http://tu-servidor:3001</pre></div>
+    <p>Abre el enlace del panel e inicia sesión.</p>
+  </section>
+
+  <section class="doc-section" id="empresa">
+    <h2>Paso 3 — Configura tu empresa</h2>
+    <p>En <strong>Ajustes</strong> controlas todo:</p>
+    <table class="doc-table">
+      <tr><th>Ajuste</th><th>Qué hace</th></tr>
+      <tr><td>Datos de la empresa</td><td>Nombre, zona horaria, contacto.</td></tr>
+      <tr><td>Radio de disponibilidad</td><td>Qué tan cerca debe estar un taxi para contar como "cercano" (3 km por defecto).</td></tr>
+      <tr><td>Tiempo de solicitud</td><td>Cuánto dura una solicitud antes de expirar (60 s por defecto).</td></tr>
+      <tr><td>Cobro de espera</td><td>Actívalo para cobrar el tiempo de espera y fija la velocidad bajo la cual se cobra tiempo en vez de distancia.</td></tr>
+      <tr><td>QR de pago</td><td>Si cada <strong>conductor</strong> muestra su propio QR, o toda la empresa usa <strong>uno</strong>.</td></tr>
+      <tr><td>Cuentas de pasajero</td><td>Desactivadas por defecto (se permite viajar de forma anónima). Actívalas para exigir cuenta verificada.</td></tr>
+    </table>
+    <div class="callout callout-info"><span class="callout-icon">ℹ️</span><div>Las cuentas de pasajero se verifican por correo. Si las activas, configura SMTP — ver <a href="admin.html">Administración</a>. Una instalación anónima no necesita correo.</div></div>
+  </section>
+
+  <section class="doc-section" id="tarifas">
+    <h2>Paso 4 — Tarifas y tiers</h2>
+    <p>En <strong>Tarifas</strong> tú defines cada monto. Taximeter trae los tiers de ejemplo <strong>Económico</strong> y <strong>SUV</strong>. Por cada tier fijas: banderazo, por km, por minuto de espera, recargo nocturno, cargo por solicitud y tarifa mínima. Más detalle en <a href="fleet-fares.html">Flota y tarifas</a>.</p>
+  </section>
+
+  <section class="doc-section" id="flota">
+    <h2>Paso 5 — Conductores y taxis</h2>
+    <p>En <strong>Flota</strong> y <strong>Conductores</strong> registra tus vehículos (placa, modelo, color, foto, tiers que puede dar) y tus conductores (nombre, foto, licencia, teléfono y su QR de pago). Luego genera un <strong>QR de vinculación</strong> por conductor: lo escanea una vez en la app para enlazar su teléfono con tu servidor y su taxi. Ver <a href="fleet-fares.html">Flota y tarifas</a>.</p>
+  </section>
+
+  <section class="doc-section" id="prueba">
+    <h2>Paso 6 — Prueba antes de salir en vivo</h2>
+    <div class="steps">
+      <div class="step-card"><div class="step-num">1</div><div class="step-body"><p>Revisa en el panel que tus tarifas, tiers, conductores y taxis estén bien.</p></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-body"><p>Vincula un teléfono y pon el taxi en servicio — confirma que aparece en el <strong>Mapa en vivo</strong> con hora reciente.</p></div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-body"><p>Desde la app del pasajero pide una carrera y confirma que al conductor le llega y puede aceptarla.</p></div></div>
+    </div>
+    <div class="callout callout-warn"><span class="callout-icon">⚠️</span><div>El servidor y el panel son lo primero en estar disponibles. Las apps de conductor y pasajero y el despacho en vivo llegan en versiones siguientes — esta guía describe el producto completo para que tu configuración esté lista.</div></div>
+    <p>Taximeter se reinicia solo tras un corte de luz (todos los servicios usan <code>restart: unless-stopped</code>). ¿Dudas de mantenimiento? Ve a <a href="admin.html">Administración</a>.</p>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-brand"><span class="brand-icon">🚕</span><span>Taximeter</span></div>
+  <p>Despacho, taxímetro y monitoreo de flota, autoalojado.</p>
+  <div class="footer-nav">
+    <a href="../index.html">Inicio</a>
+    <a href="install.html">Instalación</a>
+    <a href="daily-use.html">Uso diario</a>
+    <a href="fleet-fares.html">Flota y tarifas</a>
+    <a href="admin.html">Administración</a>
+    <a href="https://github.com/mnavas/taximeter" target="_blank">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('nav-mobile').classList.toggle('open');
+    document.getElementById('nav-toggle').classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

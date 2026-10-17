@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flota y tarifas — Taximeter</title>
+  <meta name="description" content="Tiers, montos de tarifa, reglas por horario, taxis, conductores y vinculación por QR en Taximeter." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/docs.css" />
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand"><span class="brand-icon">🚕</span><span>Taximeter</span></a>
+    <div class="nav-links">
+      <a href="install.html">Instalación</a>
+      <a href="daily-use.html">Uso diario</a>
+      <a href="fleet-fares.html" class="active">Flota y tarifas</a>
+      <a href="admin.html">Administración</a>
+      <a href="https://github.com/mnavas/taximeter" target="_blank" class="btn btn-primary">Comenzar</a>
+    </div>
+    <button class="nav-hamburger" id="nav-toggle" aria-label="Abrir menú" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="install.html">Instalación</a>
+    <a href="daily-use.html">Uso diario</a>
+    <a href="fleet-fares.html" class="active">Flota y tarifas</a>
+    <a href="admin.html">Administración</a>
+    <a href="https://github.com/mnavas/taximeter" target="_blank" class="btn btn-primary">Comenzar</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="badge">🚕 Flota y tarifas</div>
+  <h1>Lo que tú controlas</h1>
+  <p>Tiers, montos, reglas por horario, taxis, conductores y la vinculación de teléfonos por QR.</p>
+</div>
+
+<div class="toc-bar">
+  <ul>
+    <li><a href="#tiers">Tiers</a></li>
+    <li><a href="#parametros">Parámetros</a></li>
+    <li><a href="#espera">Cobro de espera</a></li>
+    <li><a href="#horario">Reglas por horario</a></li>
+    <li><a href="#taxis">Taxis</a></li>
+    <li><a href="#conductores">Conductores</a></li>
+    <li><a href="#qr">Vinculación QR</a></li>
+  </ul>
+</div>
+
+<div class="page-body">
+
+  <section class="doc-section" id="tiers">
+    <h2>Tiers de servicio</h2>
+    <p>Un <strong>tier</strong> es una clase de servicio — por ejemplo <strong>Económico</strong>, <strong>Compartido</strong>, <strong>SUV</strong>, <strong>Lujo</strong>. Defines cuantos quieras en <strong>Tarifas</strong>. Taximeter crea Económico y SUV de ejemplo al instalar. Cada taxi declara qué tiers puede dar (un SUV podría dar <em>SUV</em> y <em>Económico</em>).</p>
+  </section>
+
+  <section class="doc-section" id="parametros">
+    <h2>Parámetros de tarifa</h2>
+    <p>Tú fijas el monto de cada parámetro, por tier. No se cobra nada que no hayas configurado.</p>
+    <table class="doc-table">
+      <tr><th>Parámetro</th><th>Significado</th></tr>
+      <tr><td><code>banderazo</code></td><td>Monto base al iniciar la carrera</td></tr>
+      <tr><td><code>por km</code></td><td>Cobro por kilómetro recorrido</td></tr>
+      <tr><td><code>por min espera</code></td><td>Cobro por minuto de espera / tráfico lento</td></tr>
+      <tr><td><code>recargo nocturno</code></td><td>Extra durante una ventana nocturna</td></tr>
+      <tr><td><code>cargo por solicitud</code></td><td>Extra por una carrera pedida (vs. tomada en la calle)</td></tr>
+      <tr><td><code>tarifa mínima</code></td><td>El piso — la carrera nunca cuesta menos</td></tr>
+    </table>
+    <div class="code-wrap"><pre>tarifa = banderazo
+       + por_km        × distancia
+       + por_min_espera × espera      (solo si el cobro de espera está activo)
+       + cargo_solicitud              (si la carrera fue pedida)
+       + recargo_nocturno             (si una ventana nocturna está activa)
+tarifa = max(tarifa, tarifa_minima)</pre></div>
+  </section>
+
+  <section class="doc-section" id="espera">
+    <h2>Cobro de espera</h2>
+    <p>En <strong>Ajustes</strong> eliges si se cobra la espera:</p>
+    <ul>
+      <li><strong>Desactivado</strong> — el taxímetro cobra solo distancia.</li>
+      <li><strong>Activado</strong> — modelo por <em>umbral de velocidad</em>: por debajo de la velocidad que configures (ej. 10 km/h) se cobra <strong>tiempo</strong>; por encima, <strong>distancia</strong>. Nunca ambas a la vez, así el tráfico se cobra de forma justa.</li>
+    </ul>
+  </section>
+
+  <section class="doc-section" id="horario">
+    <h2>Reglas por horario</h2>
+    <p>Asocia reglas a un tier para que la disponibilidad o los recargos dependan de la hora y el día:</p>
+    <ul>
+      <li><strong>Ventana de disponibilidad</strong> — el tier solo se ofrece dentro de la ventana. <em>Ej.:</em> <code>Lujo</code> de <code>20:00</code> a <code>04:00</code>.</li>
+      <li><strong>Ventana de recargo</strong> — un recargo aplica dentro de la ventana. <em>Ej.:</em> recargo nocturno de <code>22:00</code> a <code>06:00</code>.</li>
+    </ul>
+    <p>Al iniciar una carrera, la app resuelve el tier por defecto según la hora, y el conductor puede cambiarlo entre los elegibles para ese vehículo.</p>
+  </section>
+
+  <section class="doc-section" id="taxis">
+    <h2>Taxis</h2>
+    <p>En <strong>Flota</strong> registra cada vehículo: placa, marca/modelo, color, foto y los tiers que puede dar. Suspende un taxi para sacarlo de servicio sin borrar su historial.</p>
+  </section>
+
+  <section class="doc-section" id="conductores">
+    <h2>Conductores</h2>
+    <p>En <strong>Conductores</strong> registra a cada persona: nombre, foto, licencia, teléfono y su QR de pago (cuando el cobro es por conductor). Suspende a un conductor para impedir que entre en servicio sin borrar sus carreras.</p>
+    <h3>QR por conductor o de la empresa</h3>
+    <p>En <strong>Ajustes → QR de pago</strong>: <strong>por conductor</strong> (cada quien muestra su QR y el cobro va a su cuenta) o <strong>empresa</strong> (todos los pagos usan un QR de la empresa).</p>
+  </section>
+
+  <section class="doc-section" id="qr">
+    <h2>Vinculación por QR</h2>
+    <p>Los teléfonos se unen a tu servidor escaneando un QR — sin cuentas de tienda de apps ni nube central.</p>
+    <div class="steps">
+      <div class="step-card"><div class="step-num">1</div><div class="step-body"><p>En <strong>Conductores</strong>, abre el conductor/taxi y genera un <strong>QR de vinculación</strong>.</p></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-body"><p>El conductor lo escanea una vez en la app.</p></div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-body"><p>La app recibe un token, aprende a qué taxi está ligada y descarga tu configuración de tarifas (para que el taxímetro funcione sin conexión).</p></div></div>
+    </div>
+    <div class="callout"><span class="callout-icon">🔐</span><div>El código de vinculación es de un solo uso y de corta vida; el token del dispositivo es duradero pero <strong>revocable</strong>. Si se pierde un teléfono, revócalo desde el panel y vincula uno nuevo.</div></div>
+    <h3>El QR público del pasajero</h3>
+    <p>Tu empresa tiene un <strong>QR/enlace público</strong> que los pasajeros escanean para pedir a tu flota. Imprímelo en los taxis, en las paradas y en tu web. Solo deja ver conteos de disponibilidad y crear solicitudes — nunca las posiciones de tu flota.</p>
+    <div class="callout callout-warn"><span class="callout-icon">⚠️</span><div>La edición de tarifas, el registro de flota/conductores y la vinculación por QR llegan con las versiones de flota y despacho. Los tiers de ejemplo ya vienen cargados desde la instalación.</div></div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-brand"><span class="brand-icon">🚕</span><span>Taximeter</span></div>
+  <p>Despacho, taxímetro y monitoreo de flota, autoalojado.</p>
+  <div class="footer-nav">
+    <a href="../index.html">Inicio</a>
+    <a href="install.html">Instalación</a>
+    <a href="daily-use.html">Uso diario</a>
+    <a href="fleet-fares.html">Flota y tarifas</a>
+    <a href="admin.html">Administración</a>
+    <a href="https://github.com/mnavas/taximeter" target="_blank">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('nav-mobile').classList.toggle('open');
+    document.getElementById('nav-toggle').classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uso diario — Taximeter</title>
+  <meta name="description" content="Cómo operar el despacho día a día con Taximeter: mapa de flota, solicitudes, carreras, cobro y confianza de pasajeros." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/docs.css" />
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand"><span class="brand-icon">🚕</span><span>Taximeter</span></a>
+    <div class="nav-links">
+      <a href="install.html">Instalación</a>
+      <a href="daily-use.html" class="active">Uso diario</a>
+      <a href="fleet-fares.html">Flota y tarifas</a>
+      <a href="admin.html">Administración</a>
+      <a href="https://github.com/mnavas/taximeter" target="_blank" class="btn btn-primary">Comenzar</a>
+    </div>
+    <button class="nav-hamburger" id="nav-toggle" aria-label="Abrir menú" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-mobile" id="nav-mobile">
+    <a href="install.html">Instalación</a>
+    <a href="daily-use.html" class="active">Uso diario</a>
+    <a href="fleet-fares.html">Flota y tarifas</a>
+    <a href="admin.html">Administración</a>
+    <a href="https://github.com/mnavas/taximeter" target="_blank" class="btn btn-primary">Comenzar</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="badge">🚕 Uso diario</div>
+  <h1>Opera tu central día a día</h1>
+  <p>Monitorea la flota, atiende solicitudes, cobra cada carrera y gestiona la confianza de tus pasajeros.</p>
+</div>
+
+<div class="toc-bar">
+  <ul>
+    <li><a href="#panel">El panel</a></li>
+    <li><a href="#mapa">Mapa en vivo</a></li>
+    <li><a href="#solicitud">La solicitud</a></li>
+    <li><a href="#tiers">Tiers</a></li>
+    <li><a href="#cobro">Cobro</a></li>
+    <li><a href="#confianza">Confianza</a></li>
+    <li><a href="#reportes">Reportes</a></li>
+  </ul>
+</div>
+
+<div class="page-body">
+
+  <section class="doc-section" id="panel">
+    <h2>El panel de un vistazo</h2>
+    <p>Al iniciar sesión llegas a <strong>Resumen</strong>: taxis en servicio, cuántos libres, carreras activas y conductores. El menú lateral te lleva a cada área:</p>
+    <table class="doc-table">
+      <tr><th>Área</th><th>Para qué</th></tr>
+      <tr><td>Mapa en vivo</td><td>Cada taxi en servicio, su ruta y cuándo reportó por última vez</td></tr>
+      <tr><td>Flota</td><td>Tus taxis</td></tr>
+      <tr><td>Conductores</td><td>Tus conductores y la vinculación</td></tr>
+      <tr><td>Tarifas</td><td>Tiers, montos y reglas por horario</td></tr>
+      <tr><td>Reportes</td><td>Ganancias, horas, kilometraje, carreras y mezcla de tiers por conductor</td></tr>
+      <tr><td>Ajustes</td><td>Empresa, política de tarifas, pagos, cuentas</td></tr>
+    </table>
+  </section>
+
+  <section class="doc-section" id="mapa">
+    <h2>Monitoreo de flota</h2>
+    <p>Cada taxi en servicio aparece en el mapa con su <strong>posición y ruta actual</strong> y una <strong>hora de última actualización</strong>. Una hora vieja suele indicar que el conductor perdió señal — sus carreras no se pierden: se sincronizan al reconectar.</p>
+  </section>
+
+  <section class="doc-section" id="solicitud">
+    <h2>El flujo de la solicitud</h2>
+    <ol>
+      <li>El pasajero pide una carrera (puede elegir un tier).</li>
+      <li>Taximeter la ofrece a los conductores elegibles, libres y cercanos.</li>
+      <li>El primero en <strong>aceptar</strong> se queda la carrera; al pasajero le llegan la placa, la foto y nombre del conductor, el color y modelo del auto, y un <strong>código de verificación</strong>.</li>
+      <li>El pasajero ve al taxi acercarse con distancia y tiempo estimado en vivo.</li>
+    </ol>
+    <div class="callout"><span class="callout-icon">🔒</span><div>El pasajero solo ve <strong>cuántos</strong> taxis hay cerca y libres — nunca el mapa de las unidades. Solo la posición de su taxi asignado se comparte, y únicamente después de que un conductor acepta.</div></div>
+  </section>
+
+  <section class="doc-section" id="tiers">
+    <h2>El tier al recoger</h2>
+    <p>Al iniciar la carrera el conductor elige el <strong>tier</strong>. La app preselecciona el correcto según la hora (con tus reglas) y el conductor puede cambiarlo entre los que el vehículo puede dar. Opcionalmente confirma el <strong>código de verificación</strong> del pasajero antes de arrancar el taxímetro.</p>
+    <p>Como cada carrera guarda el <strong>tier aplicado</strong> y una copia de sus montos, siempre puedes ver qué tier usó un conductor, en qué ruta, a qué hora y si la tarifa coincidió.</p>
+  </section>
+
+  <section class="doc-section" id="cobro">
+    <h2>Cobro: efectivo o QR</h2>
+    <p>Al terminar, la app muestra la tarifa y el conductor elige cómo se paga:</p>
+    <ul>
+      <li><strong>Efectivo</strong> — el conductor marca "pagado en efectivo". Listo.</li>
+      <li><strong>QR</strong> — el conductor muestra su QR de pago (DeUna, Produbanco u otra billetera) con el monto. El pasajero paga en su app del banco y usa <strong>"Compartir a la carrera actual"</strong> para enviar el comprobante. El conductor lo recibe y confirma.</li>
+    </ul>
+    <p>Si un pago no se concreta, el conductor puede dejar la carrera <strong>sin pagar</strong> y marcar al pasajero. Taximeter nunca retiene ni mueve dinero — solo registra cómo se pagó cada carrera.</p>
+  </section>
+
+  <section class="doc-section" id="confianza">
+    <h2>Confianza: calificaciones y marcas</h2>
+    <ul>
+      <li><strong>Pasajeros anónimos</strong> pueden pedir y viajar, pero no muestran historial. El conductor los acepta a su criterio.</li>
+      <li><strong>Pasajeros registrados</strong> (cuenta opcional, verificada por correo) construyen reputación — carreras completadas, calificación, cancelaciones — que el conductor ve antes de aceptar.</li>
+      <li>Los conductores pueden <strong>calificar</strong> pasajeros y <strong>marcarlos</strong> por problemas (no pago, no se presentó, abuso). La marca se adhiere a la cuenta, el dispositivo y el correo, para que un reincidente no la esquive con una cuenta nueva.</li>
+    </ul>
+    <p>Tú moderas las marcas desde el panel — revísalas y despéjalas para que el sistema sea justo.</p>
+  </section>
+
+  <section class="doc-section" id="reportes">
+    <h2>Reportes</h2>
+    <p>En <strong>Reportes</strong> ves, por rango de fechas y por conductor: ganancias, horas en servicio, kilometraje, número de carreras y la mezcla de tiers. Cada carrera muestra el tier aplicado, la copia de la tarifa, la hora y si se verificó el código — así las disputas se resuelven con datos guardados.</p>
+    <div class="callout callout-warn"><span class="callout-icon">⚠️</span><div>El servidor y el panel están primero; las apps y el despacho en vivo llegan en versiones siguientes. Esta guía describe el flujo completo para que sepas cómo encaja todo.</div></div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-brand"><span class="brand-icon">🚕</span><span>Taximeter</span></div>
+  <p>Despacho, taxímetro y monitoreo de flota, autoalojado.</p>
+  <div class="footer-nav">
+    <a href="../index.html">Inicio</a>
+    <a href="install.html">Instalación</a>
+    <a href="daily-use.html">Uso diario</a>
+    <a href="fleet-fares.html">Flota y tarifas</a>
+    <a href="admin.html">Administración</a>
+    <a href="https://github.com/mnavas/taximeter" target="_blank">GitHub</a>
+  </div>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('nav-mobile').classList.toggle('open');
+    document.getElementById('nav-toggle').classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
